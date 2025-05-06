@@ -1,0 +1,222 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: linear-gradient(to bottom right, rgb(105, 1, 87), rgb(0, 0, 0), rgb(0, 0, 0));
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.top-container {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  margin-top: 20px;
+  align-items: flex-start;
+}
+
+.bottom-container {
+  gap: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+/* =============== CARDS ==================*/
+.cards {
+  display: flex;
+  gap: 20px;
+  margin: 20px;
+}
+
+.card {
+  background-color: #333;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-label {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.input-group {
+  margin: 5px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px 10px;
+  border: 1px solid white;
+  border-radius: 8px;
+  background-color: #444;
+}
+
+.input-group label {
+  font-size: 20px;
+  margin-right: 7px;
+}
+
+.input-group input {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  width: 50px;
+  text-align: center;
+}
+
+/* =============== TAPE ==================*/
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 50px;
+}
+
+.square {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  color: black;
+  font-weight: bold;
+  background-color: grey;
+  border: 1px solid black;
+  box-shadow: 0 0 5px black;
+  aspect-ratio: 1;
+}
+
+/* =============== MESSAGES ==================*/
+
+.messages-container{
+  background-color: #333;
+  box-shadow: 0 0 10px rgba(0,0,0,0.7);
+  border-radius: 10px;
+  max-width: 300px;
+  
+  overflow: hidden;
+  padding: 0;
+}
+
+.messages {
+  background-color: #1f1f1f;
+  border-top: 2px solid white;
+  padding: 15px;
+  width: 250px;
+  min-height: 150px;
+  color: #fff;
+  text-shadow: 
+  0 0 5px #fff, 
+  0 0 10px #0fa, 
+  0 0 15px #0fa, 
+  0 0 20px #0fa;
+  font-family: 'Courier New', Courier, monospace;
+  color: white;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+
+.messages-header{
+  text-align: center;
+  padding: 5px;
+  font-size: 16px;
+  color: white;
+  border-bottom: 2px solid white;
+}
+
+/* =============== MACHINE ==================*/
+
+.machine {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 20px solid red;
+  top: -20px; /* Adjust to position above squares */
+  transition: left 0.4s linear; /* Smooth animation */
+}
+
+
+/* =============== MENU ==================*/
+
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  gap: 20px;
+  background-color: #333;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
+.menu button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #555;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.menu button:hover {
+  background-color: #777;
+}
+
+/* =============== SCORING ==================*/
+
+.scoring {
+  display: flex;
+  width: fit-content;
+  background-color: #2c2c2c;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.scoring table {
+  border-collapse: collapse;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+}
+
+.scoring th,
+.scoring td {
+  border: 1px solid #555;
+  padding: 10px 16px;
+  text-align: center;
+  background-color: #3b3b3b;
+}
+
+.scoring th {
+  background-color: #444;
+  font-weight: bold;
+  color: #f0f0f0;
+}
+
+.scoring tr:nth-child(even) td {
+  background-color: #343434;
+}
+
+.scoring tr:hover td {
+  background-color: #555;
+  transition: background-color 0.2s ease;
+}
