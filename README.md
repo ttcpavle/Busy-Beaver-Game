@@ -18,7 +18,7 @@ This static website demonstrates busy beaver game with 1,2,3 and 4 state Turing 
  *The choice of which replacement symbol to write, which direction to move the head, and whether to halt is based on a finite table that specifies what to do for each combination of the current state and the symbol that is read. As with a real computer program, it is possible for a Turing machine to go into an infinite loop which will never halt.*
 
 **Formal definition**
-Turing machine can be formally defined as 7-tuple $M=\langle Q, \Gamma, b, \Sigma, \delta, q_{0}, F \rangle $ where:
+Turing machine can be formally defined as 7-tuple $M= \langle Q, \Gamma, b, \Sigma, \delta, q_{0}, F\rangle$ where:
 * $\Gamma$ is a finite, non-empty set of tape alphabet symbols
 * $b \in \Gamma$  is the blank symbol (the only symbol allowed to occur on the tape infinitely often at any step during the computation);
 * $\Sigma \subseteq \Gamma \setminus \{b\}$ is the set of input symbols, that is, the set of symbols allowed to appear in the initial tape contents
