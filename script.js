@@ -1,4 +1,4 @@
-const array = new Array(23).fill(0);
+const array = new Array(25).fill(0);
 const grid = document.getElementById('grid');
 const cardsContainer = document.getElementById('cards');
 const messages = document.getElementById('messages');
@@ -13,18 +13,21 @@ let halts = false; // does machine halt (essential for the game)
 let numberOfCards = 3; // initial number of cards
 let allowedLetters = '';
 let regex = null; // regex for cards inputs
+let oneCount = 0;
+let shiftCount = 0;
 
 // =========================== INITIALIZATION =============================
 
 createRegex();
 
-document.getElementById('startButton').addEventListener('click', () => {
-  if (halts && !isRunning) {
-    resetMachine();
+document.getElementById('startButton').addEventListener('click', async () => {
+  if(isRunning) return;
+  resetMachine();
+  if (halts) {
     isRunning = true;
     clearMessagesLog();
     logMessage("Running machine...\n");
-    runTuringMachine();
+    await runTuringMachine();
   } else{
     clearMessagesLog();
     logMessage("Create valid machine before starting\n")
@@ -41,6 +44,11 @@ document.getElementById('resetButton').addEventListener('click', () => {
 document.querySelectorAll('input[name="numStates"]').forEach(radio => {
   radio.addEventListener('change', (e) => {
     numberOfCards = parseInt(e.target.value);
+    if(numberOfCards === 5){
+      document.querySelector('.grid').style.display = 'none';
+    }else{
+      document.querySelector('.grid').style.display = 'flex';
+    }
     createRegex();
     createCards();
   });
@@ -61,7 +69,7 @@ function createRegex() {
     allowedLetters += String.fromCharCode(65 + i); // A, B, C, ...
   }
   allowedLetters += allowedLetters.toLowerCase(); // add lowercase variants
-  regex = new RegExp(`^[01][RLrl][${allowedLetters}Zz]$`);
+  regex = new RegExp(`^[01][RLrl][${allowedLetters}Hh]$`);
 }
 
 function createSquares(numSquares) {
@@ -174,7 +182,7 @@ function setupValidation(input) {
       value = '';
     } else if (value.length === 2 && !/[RL]/.test(value[1])) {
       value = value[0];
-    } else if (value.length === 3 && !/[A-DZ]/.test(value[2])) {
+    } else if (value.length === 3 && !/[A-EH]/.test(value[2])) {
       value = value.slice(0, 2);
     }
 
@@ -197,22 +205,24 @@ function checkAllInputs() {
     if (!regex.test(value)) {
       input.style.backgroundColor = 'red';
       logMessage(`Invalid format: "${value}" ${input.dataset.card}->${input.dataset.valueLabel}`);
+      halts = false;
     } else {
       input.style.backgroundColor = 'lightgreen';
-      if (value[2] === 'Z' || value[2] === 'z') {
+      if (value[2] === 'H' || value[2] === 'h') {
         zCount++;
       }
     }
   });
 
   if (zCount === 0) {
-    logMessage('No input ends with "Z"')
+    logMessage('No input ends with H')
+    halts = false;
   } else if (zCount > 1) {
-    logMessage('Multiple inputs end with "Z"');
+    logMessage('Multiple inputs end with H');
   }
 
   if(messagesLog.length === 0){
-    logMessage('Valid turing machine\nTesting if machine halts in reasonable time...\n');
+    logMessage('Valid turing machine\n\nTesting if machine halts in reasonable time...\n');
     rebuildCardRules();
     halts = checkIfHalts();
   }
@@ -243,11 +253,13 @@ function rebuildCardRules() {
 
 
 function checkIfHalts() {
-  const testArray = new Array(10000).fill(0);
-  let currIndex = 5000;
+  const testArray = new Array(100000).fill(0);
+  let currIndex = 50000;
   let currState = 'A';
   let steps = 0;
-  const maxSteps = 100000; // max steps limit
+  const maxSteps = 50000000; // max steps limit
+  let lastUpdate = 0;
+  const updateInterval = 1000; // Update UI every 1000 steps
 
   while (currIndex >= 0 && currIndex < testArray.length && steps < maxSteps) {
     const currentValue = testArray[currIndex];
@@ -272,8 +284,8 @@ function checkIfHalts() {
       currIndex--;
     }
 
-    if (nextState === 'Z') {
-      logMessage(`Reached halting state Z. Machine halts.`);
+    if (nextState === 'H') {
+      logMessage(`Reached halting state H. Machine halts.`);
       return true;
     } else {
       currState = nextState;
@@ -281,7 +293,6 @@ function checkIfHalts() {
 
     steps++;
   }
-
   if (steps >= maxSteps) {
     logMessage(`Exceeded maximum steps. Machine probably doesn't halt.`);
   } else {
@@ -316,58 +327,67 @@ function sleep(ms) {
 }
 
 async function runTuringMachine() {
+  oneCount = 0;
+  shiftCount = 0;
   let currIndex = Math.floor(array.length / 2);
   const numSquares = array.length;
   let currState = 'A';
   const machineCursor = createMachineCursor();
 
   while (isRunning) {
-    if (currIndex >= numSquares) {
-      logMessage('Out of bounds - increase displayed array size');
-      isRunning = false;
-      break;
-    }
 
-    const square = document.querySelectorAll('.square')[currIndex];
+    await sleep(400);
+
+    // ============================== initialize variables ===============================
+    let square = document.querySelectorAll('.square')[currIndex];
     const currentValue = array[currIndex];
     const rule = cardRules.find(r => r.cardLetter === currState);
     const instruction = currentValue === 0 ? rule.zero.input : rule.one.input;
-
+    setInputColor(rule.cardLetter, currentValue);
     const write = parseInt(instruction[0]);
     const move = instruction[1];
     const nextState = instruction[2].toUpperCase();
 
-    updateMachineCursor(square);
-
-    await sleep(400);
-    setInputColor(rule.cardLetter, currentValue);
-
-    await sleep(400);
+    // ============================== write ===============================
     playSound(popSound, 0.02);
     array[currIndex] = write;
     square.textContent = write;
     square.style.backgroundColor = write === 0 ? 'white' : 'grey';
-    
+
     if (move === 'R' || move === 'r') {
       currIndex++;
     } else if (move === 'L' || move === 'l') {
       currIndex--;
     }
+    oneCount = array.filter(x => x === 1).length;
+    updateScores();
 
-    if (nextState === 'Z') {
+    await sleep(200);
+
+    // ============================== move ===============================
+    square = document.querySelectorAll('.square')[currIndex];
+    updateMachineCursor(square);
+    await sleep(400);
+
+    // ============================== set input color and next state ===============================
+    shiftCount++;
+    updateScores();
+    setInputColor(rule.cardLetter, currentValue);   
+    currState = nextState;
+
+    if (nextState === 'H') {
       logMessage('HALTED');
       isRunning = false;
       break;
     }
-
-    await sleep(200);
-    currState = nextState;
   }
 }
 
-
 function resetMachine(){
   isRunning = false;
+  oneCount = 0;
+  shiftCount = 0;
+  updateScores();
   array.fill(0);  
   createSquares(numSquares);
   cleanInputsColor();
@@ -388,6 +408,11 @@ function cleanInputsColor(){
   inputs.forEach(input => {
     input.style.backgroundColor = 'white';
   })
+}
+
+function updateScores(){
+  document.getElementById('oneCount').textContent = oneCount.toLocaleString();;
+  document.getElementById('shiftCount').textContent = shiftCount.toLocaleString();; 
 }
 
 function playSound(sound, delay){

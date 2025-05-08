@@ -43,6 +43,16 @@ body {
   align-items: center;
 }
 
+.card:hover {
+  background-color: #1f1f1f;
+  box-shadow: 
+  0 0 5px #fff, 
+  0 0 10px rgb(174, 255, 0), 
+  0 0 15px #0fa, 
+  0 0 20px rgb(0, 242, 255);
+  transition:  0.2s ease;
+}
+
 .card-label {
   font-size: 24px;
   font-weight: 700;
@@ -116,11 +126,6 @@ body {
   width: 250px;
   min-height: 150px;
   color: #fff;
-  text-shadow: 
-  0 0 5px #fff, 
-  0 0 10px #0fa, 
-  0 0 15px #0fa, 
-  0 0 20px #0fa;
   font-family: 'Courier New', Courier, monospace;
   color: white;
   font-size: 14px;
@@ -219,4 +224,21 @@ body {
 .scoring tr:hover td {
   background-color: #555;
   transition: background-color 0.2s ease;
+}
+
+.stats-box {
+  background-color: #1f1f1f;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-top: 10px;
+  box-shadow: 
+  0 0 5px #fff, 
+  0 0 10px rgb(174, 255, 0), 
+  0 0 15px #0fa, 
+  0 0 20px rgb(0, 242, 255);
+  font-family: sans-serif;
+}
+.stats-box p {
+  margin: 5px 0;
 }
