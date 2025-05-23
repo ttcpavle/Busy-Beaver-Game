@@ -1,12 +1,16 @@
 body {
-    margin: 0;
+  margin: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: 
-    url("resources/beaver1.png"),
-    linear-gradient(to bottom right, rgb(0, 192, 176), rgb(0, 0, 0), rgb(27, 2, 74));
+  background-image: url("resources/beaver1.png"),
+    linear-gradient(
+      to bottom right,
+      rgb(0, 192, 176),
+      rgb(0, 0, 0),
+      rgb(27, 2, 74)
+    );
   background-repeat: no-repeat, no-repeat;
   background-position: calc(20px) calc(20px), center;
   background-size: 50vh, cover;
@@ -15,6 +19,90 @@ body {
   font-family: Arial, sans-serif;
 }
 
+/* =============== SIDE MENU ==================*/
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav p {
+  padding: 5px 15px 5px 25px;
+  text-decoration: none;
+  font-size: 16px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
+}
+
+.nav-toggle {
+  font-size: 30px;
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 0;
+}
+
+.nav-toggle:hover {
+  opacity: 0.8;
+}
+
+.bb-button {
+  display: block;
+  align-items: center;
+  width: 60%;
+  margin: 10px 0 0 20px;
+  padding: 6px;
+  background: rgb(0, 192, 176);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.bb-button:hover {
+  background: rgb(0, 121, 111);
+}
+/* =============== TOP/BOTTOM CONTAINER ==================*/
 .top-container {
   display: flex;
   flex-direction: row;
@@ -46,7 +134,7 @@ body {
   background-color: #333;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.7);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -54,12 +142,9 @@ body {
 
 .card:hover {
   background-color: #1f1f1f;
-  box-shadow: 
-  0 0 5px #fff, 
-  0 0 10px rgb(174, 255, 0), 
-  0 0 15px #0fa, 
-  0 0 20px rgb(0, 242, 255);
-  transition:  0.2s ease;
+  box-shadow: 0 0 5px #fff, 0 0 10px rgb(174, 255, 0), 0 0 15px #0fa,
+    0 0 20px rgb(0, 242, 255);
+  transition: 0.2s ease;
 }
 
 .card-label {
@@ -100,7 +185,6 @@ body {
   justify-content: center;
   align-items: center;
   margin: 10vh 5vh 5vh 5vh;
-  
 }
 
 .square {
@@ -120,9 +204,9 @@ body {
 
 /* =============== MESSAGES ==================*/
 
-.messages-container{
+.messages-container {
   background-color: #333;
-  box-shadow: 0 0 10px rgba(0,0,0,0.7);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
   border-radius: 10px;
   max-width: 300px;
   width: 250px;
@@ -137,13 +221,13 @@ body {
   width: 250px;
   min-height: 150px;
   color: #fff;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   color: white;
   font-size: 14px;
   white-space: pre-wrap;
 }
 
-.messages-header{
+.messages-header {
   text-align: center;
   padding: 5px;
   font-size: 16px;
@@ -164,9 +248,7 @@ body {
   transition: left 0.4s linear; /* Smooth animation */
 }
 
-
 /* =============== MENU ==================*/
-
 
 .menu {
   display: flex;
@@ -176,7 +258,7 @@ body {
   background-color: #333;
   padding: 10px 20px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
 }
 
 .menu button {
@@ -198,10 +280,11 @@ body {
 
 .scoring {
   display: flex;
+  margin: 10px 20px 10px 20px;
   width: fit-content;
   background-color: #2c2c2c;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
   justify-content: center;
   align-items: center;
   overflow-x: auto;
@@ -210,7 +293,7 @@ body {
 .scoring table {
   border-collapse: collapse;
   color: #fff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
 }
 
@@ -237,17 +320,16 @@ body {
   transition: background-color 0.2s ease;
 }
 
+/* =============== STATS BOX ==================*/
+
 .stats-box {
   background-color: #1f1f1f;
   color: white;
   padding: 10px 20px;
   border-radius: 10px;
   margin-top: 10px;
-  box-shadow: 
-  0 0 5px #fff, 
-  0 0 10px rgb(174, 255, 0), 
-  0 0 15px #0fa, 
-  0 0 20px rgb(0, 242, 255);
+  box-shadow: 0 0 5px #fff, 0 0 10px rgb(174, 255, 0), 0 0 15px #0fa,
+    0 0 20px rgb(0, 242, 255);
   font-family: sans-serif;
 }
 .stats-box p {

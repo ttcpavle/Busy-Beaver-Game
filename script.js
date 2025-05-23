@@ -1,8 +1,8 @@
 const array = new Array(25).fill(0);
-const grid = document.getElementById('grid');
-const cardsContainer = document.getElementById('cards');
-const messages = document.getElementById('messages');
-const popSound = new Audio('resources/pop.mp3');
+const grid = document.getElementById("grid");
+const cardsContainer = document.getElementById("cards");
+const messages = document.getElementById("messages");
+const popSound = new Audio("resources/pop.mp3");
 
 let inputs = []; // track all inputs
 let cardRules = [];
@@ -11,7 +11,7 @@ let numSquares = array.length; // number of squares
 let isRunning = false;
 let halts = false; // does machine halt (essential for the game)
 let numberOfCards = 3; // initial number of cards
-let allowedLetters = '';
+let allowedLetters = "";
 let regex = null; // regex for cards inputs
 let oneCount = 0;
 let shiftCount = 0;
@@ -20,34 +20,50 @@ let shiftCount = 0;
 
 createRegex();
 
-document.getElementById('startButton').addEventListener('click', async () => {
-  if(isRunning) return;
+document.getElementById("startButton").addEventListener("click", async () => {
+  if (isRunning) return;
   resetMachine();
   if (halts) {
     isRunning = true;
     clearMessagesLog();
     logMessage("Running machine...\n");
     await runTuringMachine();
-  } else{
+  } else {
     clearMessagesLog();
-    logMessage("Create valid machine before starting\n")
+    logMessage("Create valid machine before starting\n");
   }
 });
 
-document.getElementById('resetButton').addEventListener('click', () => {
+document.getElementById("resetButton").addEventListener("click", () => {
   resetMachine();
   clearMessagesLog();
   logMessage("Machine reseted");
-  
 });
 
-document.querySelectorAll('input[name="numStates"]').forEach(radio => {
-  radio.addEventListener('change', (e) => {
+document.querySelectorAll(".bb-button").forEach((button) => {
+  button.addEventListener("click", () => {
+    const id = button.id;
+
+    if (id === "bb2") {
+      console.log("BB Σ(2) clicked");
+      // Add logic for Σ(2) here
+    } else if (id === "bb3") {
+      console.log("BB Σ(3) clicked");
+      // Add logic for Σ(3) here
+    } else if (id === "bb4") {
+      console.log("BB Σ(4) clicked");
+      // Add logic for Σ(4) here
+    }
+  });
+});
+
+document.querySelectorAll('input[name="numStates"]').forEach((radio) => {
+  radio.addEventListener("change", (e) => {
     numberOfCards = parseInt(e.target.value);
-    if(numberOfCards === 5){
-      document.querySelector('.grid').style.display = 'none';
-    }else{
-      document.querySelector('.grid').style.display = 'flex';
+    if (numberOfCards === 5) {
+      document.querySelector(".grid").style.display = "none";
+    } else {
+      document.querySelector(".grid").style.display = "flex";
     }
     createRegex();
     createCards();
@@ -57,14 +73,14 @@ document.querySelectorAll('input[name="numStates"]').forEach(radio => {
 createCards();
 createSquares(numSquares);
 
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   //createSquares(numSquares);
 });
 
 // ================================ FUNCTIONS ==============================
 
 function createRegex() {
-  let allowedLetters = '';
+  let allowedLetters = "";
   for (let i = 0; i < numberOfCards; i++) {
     allowedLetters += String.fromCharCode(65 + i); // A, B, C, ...
   }
@@ -73,10 +89,10 @@ function createRegex() {
 }
 
 function createSquares(numSquares) {
-  grid.innerHTML = '';
+  grid.innerHTML = "";
   const maxSquareSize = 50;
   const gridWidth = grid.offsetWidth;
-  
+
   let squareSize = maxSquareSize;
   if (numSquares * maxSquareSize > gridWidth) {
     squareSize = Math.floor(gridWidth / numSquares);
@@ -84,19 +100,18 @@ function createSquares(numSquares) {
 
   // Create each square
   for (let i = 0; i < numSquares; i++) {
-    
-    const square = document.createElement('div');
-    square.className = 'square';
+    const square = document.createElement("div");
+    square.className = "square";
     //square.style.width = `${squareSize}px`;
     //square.style.height = `${squareSize}px`;
 
     const fontSize = squareSize * 0.7;
     //square.style.fontSize = `${fontSize}px`;
     square.textContent = array[i];
-    if(array[i] === 1){
-      square.style.backgroundColor = 'grey';
-    }else if(array[i] === 0){
-      square.style.backgroundColor = 'white';
+    if (array[i] === 1) {
+      square.style.backgroundColor = "grey";
+    } else if (array[i] === 0) {
+      square.style.backgroundColor = "white";
     }
     grid.appendChild(square);
   }
@@ -104,46 +119,44 @@ function createSquares(numSquares) {
 
 function logMessage(text) {
   messagesLog.push(text);
-  messages.textContent = messagesLog.join('\n');
+  messages.textContent = messagesLog.join("\n");
 }
 
-function clearMessagesLog(){
+function clearMessagesLog() {
   messagesLog = [];
-  messages.textContent = '';
+  messages.textContent = "";
 }
 
-
-function createCards(){
-
-  cardsContainer.innerHTML = '';
+function createCards() {
+  cardsContainer.innerHTML = "";
   inputs = [];
   cardRules = [];
   halts = false;
   isRunning = false;
   clearMessagesLog();
   resetMachine();
-  
+
   for (let i = 0; i < numberOfCards; i++) {
-    const card = document.createElement('div');
-    card.className = 'card';
-    
-    const label = document.createElement('div');
-    label.className = 'card-label';
-  
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const label = document.createElement("div");
+    label.className = "card-label";
+
     const cardLetter = String.fromCharCode(65 + i);
     label.textContent = cardLetter;
-    
-    const inputGroup0 = createInputGroup('0', cardLetter);
-    const inputGroup1 = createInputGroup('1', cardLetter);
-    
+
+    const inputGroup0 = createInputGroup("0", cardLetter);
+    const inputGroup1 = createInputGroup("1", cardLetter);
+
     card.appendChild(label);
     card.appendChild(inputGroup0.group);
     card.appendChild(inputGroup1.group);
-    
+
     cardsContainer.appendChild(card);
-  
+
     inputs.push(inputGroup0.input, inputGroup1.input);
-  
+
     setupValidation(inputGroup0.input);
     setupValidation(inputGroup1.input);
   }
@@ -151,33 +164,33 @@ function createCards(){
 
 // Helper function to create input groups
 function createInputGroup(text, cardLetter) {
-  const group = document.createElement('div');
-  group.className = 'input-group';
-  
-  const label = document.createElement('label');
+  const group = document.createElement("div");
+  group.className = "input-group";
+
+  const label = document.createElement("label");
   label.textContent = text;
-  
-  const input = document.createElement('input');
-  input.type = 'text';
+
+  const input = document.createElement("input");
+  input.type = "text";
   input.maxLength = 3;
-  
+
   input.dataset.valueLabel = text;
   input.dataset.card = cardLetter;
 
   group.appendChild(label);
   group.appendChild(input);
-  
+
   // returns group div and its input
   return { group, input };
 }
 
 // Validation setup
 function setupValidation(input) {
-  input.addEventListener('input', () => {
+  input.addEventListener("input", () => {
     let value = input.value.toUpperCase();
 
     if (value.length === 1 && !/[01]/.test(value[0])) {
-      value = '';
+      value = "";
     } else if (value.length === 2 && !/[RL]/.test(value[1])) {
       value = value[0];
     } else if (value.length === 3 && !/[A-EH]/.test(value[2])) {
@@ -185,10 +198,10 @@ function setupValidation(input) {
     }
 
     input.value = value;
-    input.style.backgroundColor = 'white';
+    input.style.backgroundColor = "white";
   });
 
-  input.addEventListener('blur', () => {
+  input.addEventListener("blur", () => {
     checkAllInputs();
   });
 }
@@ -198,70 +211,72 @@ function checkAllInputs() {
   let zCount = 0;
   messagesLog = [];
 
-  inputs.forEach(input => {
+  inputs.forEach((input) => {
     const value = input.value.trim();
     if (!regex.test(value)) {
-      input.style.backgroundColor = 'red';
-      logMessage(`Invalid format: "${value}" ${input.dataset.card}->${input.dataset.valueLabel}`);
+      input.style.backgroundColor = "red";
+      logMessage(
+        `Invalid format: "${value}" ${input.dataset.card}->${input.dataset.valueLabel}`
+      );
       halts = false;
     } else {
-      input.style.backgroundColor = 'lightgreen';
-      if (value[2] === 'H' || value[2] === 'h') {
+      input.style.backgroundColor = "lightgreen";
+      if (value[2] === "H" || value[2] === "h") {
         zCount++;
       }
     }
   });
 
   if (zCount === 0) {
-    logMessage('No input ends with H')
+    logMessage("No input ends with H");
     halts = false;
   } else if (zCount > 1) {
-    logMessage('Multiple inputs end with H');
+    logMessage("Multiple inputs end with H");
   }
 
-  if(messagesLog.length === 0){
-    logMessage('Valid turing machine\n\nTesting if machine halts in reasonable time...\n');
+  if (messagesLog.length === 0) {
+    logMessage(
+      "Valid turing machine\n\nTesting if machine halts in reasonable time...\n"
+    );
     rebuildCardRules();
     halts = checkIfHalts();
   }
-
 }
 
 // cards data
 function rebuildCardRules() {
   cardRules = [];
 
-  cardsContainer.querySelectorAll('.card').forEach(card => {
-    const cardLabel = card.querySelector('.card-label').textContent;
-    const cardInputs = card.querySelectorAll('input');
+  cardsContainer.querySelectorAll(".card").forEach((card) => {
+    const cardLabel = card.querySelector(".card-label").textContent;
+    const cardInputs = card.querySelectorAll("input");
 
     cardRules.push({
       cardLetter: cardLabel,
       zero: {
         input: cardInputs[0].value,
-        element: cardInputs[0]
+        element: cardInputs[0],
       },
       one: {
         input: cardInputs[1].value,
-        element: cardInputs[1]
-      }
+        element: cardInputs[1],
+      },
     });
   });
 }
 
-
 function checkIfHalts() {
-  const testArray = new Array(100000).fill(0);
-  let currIndex = 50000;
-  let currState = 'A';
+  const testArray = new Array(10000).fill(0);
+  let currIndex = 5000;
+  let currState = "A";
   let steps = 0;
-  const maxSteps = 50000000; // max steps limit
+  const maxSteps = 100000; // max steps limit
   let lastUpdate = 0;
   const updateInterval = 1000; // Update UI every 1000 steps
 
   while (currIndex >= 0 && currIndex < testArray.length && steps < maxSteps) {
     const currentValue = testArray[currIndex];
-    const rule = cardRules.find(r => r.cardLetter === currState);
+    const rule = cardRules.find((r) => r.cardLetter === currState);
 
     if (!rule) {
       logMessage(`No rule for state ${currState}. Machine halts.`);
@@ -276,13 +291,13 @@ function checkIfHalts() {
 
     testArray[currIndex] = write;
 
-    if (move === 'R' || move === 'r') {
+    if (move === "R" || move === "r") {
       currIndex++;
-    } else if (move === 'L' || move === 'l') {
+    } else if (move === "L" || move === "l") {
       currIndex--;
     }
 
-    if (nextState === 'H') {
+    if (nextState === "H") {
       logMessage(`Reached halting state H. Machine halts.`);
       return true;
     } else {
@@ -300,28 +315,31 @@ function checkIfHalts() {
 }
 
 function createMachineCursor() {
-  const machineCursor = document.createElement('div');
-  machineCursor.className = 'machine';
+  const machineCursor = document.createElement("div");
+  machineCursor.className = "machine";
 
-  const square = document.querySelectorAll('.square')[Math.floor(array.length / 2)];
+  const square =
+    document.querySelectorAll(".square")[Math.floor(array.length / 2)];
   grid.appendChild(machineCursor);
   updateMachineCursor(square);
-  
+
   return machineCursor;
 }
 
 function updateMachineCursor(square) {
-  const machineCursor = document.querySelector('.machine');
+  const machineCursor = document.querySelector(".machine");
 
   if (square) {
     const squareRect = square.getBoundingClientRect();
-    machineCursor.style.left = `${squareRect.left + (squareRect.width / 2) - 10}px`;
+    machineCursor.style.left = `${
+      squareRect.left + squareRect.width / 2 - 10
+    }px`;
     machineCursor.style.top = `${squareRect.top - 20}px`;
   }
 }
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function runTuringMachine() {
@@ -329,17 +347,16 @@ async function runTuringMachine() {
   shiftCount = 0;
   let currIndex = Math.floor(array.length / 2);
   const numSquares = array.length;
-  let currState = 'A';
+  let currState = "A";
   const machineCursor = createMachineCursor();
 
   while (isRunning) {
-
     await sleep(400);
 
     // ============================== initialize variables ===============================
-    let square = document.querySelectorAll('.square')[currIndex];
+    let square = document.querySelectorAll(".square")[currIndex];
     const currentValue = array[currIndex];
-    const rule = cardRules.find(r => r.cardLetter === currState);
+    const rule = cardRules.find((r) => r.cardLetter === currState);
     const instruction = currentValue === 0 ? rule.zero.input : rule.one.input;
     setInputColor(rule.cardLetter, currentValue);
     const write = parseInt(instruction[0]);
@@ -350,70 +367,81 @@ async function runTuringMachine() {
     playSound(popSound, 0.02);
     array[currIndex] = write;
     square.textContent = write;
-    square.style.backgroundColor = write === 0 ? 'white' : 'grey';
+    square.style.backgroundColor = write === 0 ? "white" : "grey";
 
-    if (move === 'R' || move === 'r') {
+    if (move === "R" || move === "r") {
       currIndex++;
-    } else if (move === 'L' || move === 'l') {
+    } else if (move === "L" || move === "l") {
       currIndex--;
     }
-    oneCount = array.filter(x => x === 1).length;
+    oneCount = array.filter((x) => x === 1).length;
     updateScores();
 
     await sleep(200);
 
     // ============================== move ===============================
-    square = document.querySelectorAll('.square')[currIndex];
+    square = document.querySelectorAll(".square")[currIndex];
     updateMachineCursor(square);
     await sleep(400);
 
     // ============================== set input color and next state ===============================
     shiftCount++;
     updateScores();
-    setInputColor(rule.cardLetter, currentValue);   
+    setInputColor(rule.cardLetter, currentValue);
     currState = nextState;
 
-    if (nextState === 'H') {
-      logMessage('HALTED');
+    if (nextState === "H") {
+      logMessage("HALTED");
       isRunning = false;
       break;
     }
   }
 }
 
-function resetMachine(){
+function resetMachine() {
   isRunning = false;
   oneCount = 0;
   shiftCount = 0;
   updateScores();
-  array.fill(0);  
+  array.fill(0);
   createSquares(numSquares);
   cleanInputsColor();
 }
 
-function setInputColor(state, label){
-
+function setInputColor(state, label) {
   cleanInputsColor();
 
-  inputs.forEach(input => {
-    if(input.dataset.valueLabel === String(label) && input.dataset.card === state){
-      input.style.backgroundColor = '#bf03bc';
+  inputs.forEach((input) => {
+    if (
+      input.dataset.valueLabel === String(label) &&
+      input.dataset.card === state
+    ) {
+      input.style.backgroundColor = "#bf03bc";
     }
-  })
+  });
 }
 
-function cleanInputsColor(){
-  inputs.forEach(input => {
-    input.style.backgroundColor = 'white';
-  })
+function cleanInputsColor() {
+  inputs.forEach((input) => {
+    input.style.backgroundColor = "white";
+  });
 }
 
-function updateScores(){
-  document.getElementById('oneCount').textContent = oneCount.toLocaleString();;
-  document.getElementById('shiftCount').textContent = shiftCount.toLocaleString();; 
+function updateScores() {
+  document.getElementById("oneCount").textContent = oneCount.toLocaleString();
+  document.getElementById("shiftCount").textContent =
+    shiftCount.toLocaleString();
 }
 
-function playSound(sound, delay){
+function playSound(sound, delay) {
   sound.currentTime = delay;
   sound.play();
+}
+
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
 }

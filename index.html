@@ -1,71 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="index.css">
-</head>
-<body>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+        >&times;</a
+      >
+      <p>Load Busy Beavers:</p>
+      <button id="bb2" class="bb-button">BB &Sigma;(2)</button>
+      <button id="bb3" class="bb-button">BB &Sigma;(3)</button>
+      <button id="bb4" class="bb-button">BB &Sigma;(4)</button>
+      <p>Proved busy beavers table:</p>
+      <div class="scoring">
+        <table>
+          <tr>
+            <th colspan="3">Proved busy beavers</th>
+          </tr>
+          <tr>
+            <th>n</th>
+            <th>&Sigma;(n)</th>
+            <th>S(n)</th>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>4</td>
+            <td>6</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>6</td>
+            <td>21</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>13</td>
+            <td>107</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>4098</td>
+            <td>47,176,870</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <span class="nav-toggle" onclick="openNav()">&#9776;</span>
     <div class="top-container">
-              <div class="messages-container">
-            <div class="messages-header">Machine info</div>
-            <div class="messages" id="messages"></div>
-        </div>
-        <div class="cards" id="cards"></div>
+      <div class="messages-container">
+        <div class="messages-header">Machine info</div>
+        <div class="messages" id="messages"></div>
+      </div>
+      <div class="cards" id="cards"></div>
     </div>
     <div class="grid" id="grid"></div>
     <div class="bottom-container">
-        <div class="scoring">
-          <table>
-            <tr> <th colspan="3">Proved busy beavers</th></tr>
-            <tr>
-              <th>n</th>
-              <th>E(n)</th>
-              <th>S(n)</th>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>4</td>
-              <td>6</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>6</td>
-              <td>21</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>13</td>
-              <td>107</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>4098</td>
-              <td>47,176,870</td>
-            </tr>
-            
-          </table>
-        </div>
-        <div class="menu" id="menu">
-          <button id="startButton">START</button>
-          <button id="resetButton">RESET</button>
-          <fieldset>
-            <legend>Number of machine states</legend>
-            <label><input type="radio" name="numStates" value="1">1</label>
-            <label><input type="radio" name="numStates" value="2">2</label>
-            <label><input type="radio" name="numStates" value="3" checked>3</label>
-            <label><input type="radio" name="numStates" value="4">4</label>           
-           <!-- <label><input type="radio" name="numStates" value="5">5</label> -->
-          </fieldset>
-        </div>
-        <div class="stats-box" id="statsBox">
-          <p>Ones: <span id="oneCount">0</span></p>
-          <p>Shifts: <span id="shiftCount">0</span></p>
-        </div>
-        
+      <div class="menu" id="menu">
+        <button id="startButton">START</button>
+        <button id="resetButton">RESET</button>
+        <fieldset>
+          <legend>Number of machine states</legend>
+          <label><input type="radio" name="numStates" value="1" />1</label>
+          <label><input type="radio" name="numStates" value="2" />2</label>
+          <label
+            ><input type="radio" name="numStates" value="3" checked />3</label
+          >
+          <label><input type="radio" name="numStates" value="4" />4</label>
+          <!-- <label><input type="radio" name="numStates" value="5">5</label> -->
+        </fieldset>
       </div>
-      
+      <div class="stats-box" id="statsBox">
+        <p>Ones: <span id="oneCount">0</span></p>
+        <p>Shifts: <span id="shiftCount">0</span></p>
+      </div>
+    </div>
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
