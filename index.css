@@ -7,6 +7,17 @@ body {
   background-image: linear-gradient(to bottom right, rgb(105, 1, 87), rgb(0, 0, 0), rgb(0, 0, 0));
   color: white;
   font-family: Arial, sans-serif;
+  z-index: 1;
+}
+.bg-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;   /* Adjust size */
+  height: 200px;
+  background-image: url('resources/beaver1.png');
+  background-size: cover;
+  z-index: -1;    /* Places it behind content */
 }
 
 .top-container {
@@ -90,15 +101,17 @@ body {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  margin-top: 50px;
+  margin: 50px 20px 10px 20px;
+  
 }
 
 .square {
+  width: 3.5vw;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 16px;
+  font-size: 2vw;
   color: black;
   font-weight: bold;
   background-color: grey;

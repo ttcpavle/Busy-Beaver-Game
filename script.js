@@ -58,7 +58,7 @@ createCards();
 createSquares(numSquares);
 
 window.addEventListener('resize', () => {
-  createSquares(numSquares);
+  //createSquares(numSquares);
 });
 
 // ================================ FUNCTIONS ==============================
@@ -84,21 +84,19 @@ function createSquares(numSquares) {
 
   // Create each square
   for (let i = 0; i < numSquares; i++) {
+    
     const square = document.createElement('div');
     square.className = 'square';
-    square.style.width = `${squareSize}px`;
-    square.style.height = `${squareSize}px`;
+    //square.style.width = `${squareSize}px`;
+    //square.style.height = `${squareSize}px`;
 
     const fontSize = squareSize * 0.7;
-    square.style.fontSize = `${fontSize}px`;
-    
+    //square.style.fontSize = `${fontSize}px`;
+    square.textContent = array[i];
     if(array[i] === 1){
       square.style.backgroundColor = 'grey';
     }else if(array[i] === 0){
       square.style.backgroundColor = 'white';
-    }
-    if (squareSize > 10) {
-      square.textContent = array[i];
     }
     grid.appendChild(square);
   }
