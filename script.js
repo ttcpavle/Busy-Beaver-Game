@@ -16,9 +16,31 @@ let regex = null; // regex for cards inputs
 let oneCount = 0;
 let shiftCount = 0;
 
+const BB2 = {
+  A0: "1RB",
+  A1: "1LB",
+  B0: "1LA",
+  B1: "1RH",
+};
+const BB3 = {
+  A0: "1RB",
+  A1: "1RH",
+  B0: "0RC",
+  B1: "1RB",
+  C0: "1LC",
+  C1: "1LA",
+};
+const BB4 = {
+  A0: "1RB",
+  A1: "1LB",
+  B0: "1LA",
+  B1: "0LC",
+  C0: "1RH",
+  C1: "1LD",
+  D0: "1RD",
+  D1: "0RA",
+};
 // =========================== INITIALIZATION =============================
-
-createRegex();
 
 document.getElementById("startButton").addEventListener("click", async () => {
   if (isRunning) return;
@@ -46,13 +68,31 @@ document.querySelectorAll(".bb-button").forEach((button) => {
 
     if (id === "bb2") {
       console.log("BB Σ(2) clicked");
-      // Add logic for Σ(2) here
+      numberOfCards = 2;
+      createRegex();
+      createCards();
+      inputs.forEach((input) => {
+        input.value = BB2[input.id];
+      });
+      checkAllInputs();
     } else if (id === "bb3") {
       console.log("BB Σ(3) clicked");
-      // Add logic for Σ(3) here
+      numberOfCards = 3;
+      createRegex();
+      createCards();
+      inputs.forEach((input) => {
+        input.value = BB3[input.id];
+      });
+      checkAllInputs();
     } else if (id === "bb4") {
       console.log("BB Σ(4) clicked");
-      // Add logic for Σ(4) here
+      numberOfCards = 4;
+      createRegex();
+      createCards();
+      inputs.forEach((input) => {
+        input.value = BB4[input.id];
+      });
+      checkAllInputs();
     }
   });
 });
@@ -60,22 +100,14 @@ document.querySelectorAll(".bb-button").forEach((button) => {
 document.querySelectorAll('input[name="numStates"]').forEach((radio) => {
   radio.addEventListener("change", (e) => {
     numberOfCards = parseInt(e.target.value);
-    if (numberOfCards === 5) {
-      document.querySelector(".grid").style.display = "none";
-    } else {
-      document.querySelector(".grid").style.display = "flex";
-    }
     createRegex();
     createCards();
   });
 });
 
+createRegex();
 createCards();
 createSquares(numSquares);
-
-window.addEventListener("resize", () => {
-  //createSquares(numSquares);
-});
 
 // ================================ FUNCTIONS ==============================
 
@@ -90,23 +122,10 @@ function createRegex() {
 
 function createSquares(numSquares) {
   grid.innerHTML = "";
-  const maxSquareSize = 50;
-  const gridWidth = grid.offsetWidth;
-
-  let squareSize = maxSquareSize;
-  if (numSquares * maxSquareSize > gridWidth) {
-    squareSize = Math.floor(gridWidth / numSquares);
-  }
-
   // Create each square
   for (let i = 0; i < numSquares; i++) {
     const square = document.createElement("div");
     square.className = "square";
-    //square.style.width = `${squareSize}px`;
-    //square.style.height = `${squareSize}px`;
-
-    const fontSize = squareSize * 0.7;
-    //square.style.fontSize = `${fontSize}px`;
     square.textContent = array[i];
     if (array[i] === 1) {
       square.style.backgroundColor = "grey";
@@ -163,19 +182,17 @@ function createCards() {
 }
 
 // Helper function to create input groups
-function createInputGroup(text, cardLetter) {
+function createInputGroup(digit, cardLetter) {
   const group = document.createElement("div");
   group.className = "input-group";
 
   const label = document.createElement("label");
-  label.textContent = text;
+  label.textContent = digit;
 
   const input = document.createElement("input");
   input.type = "text";
   input.maxLength = 3;
-
-  input.dataset.valueLabel = text;
-  input.dataset.card = cardLetter;
+  input.id = cardLetter + digit;
 
   group.appendChild(label);
   group.appendChild(input);
@@ -215,9 +232,7 @@ function checkAllInputs() {
     const value = input.value.trim();
     if (!regex.test(value)) {
       input.style.backgroundColor = "red";
-      logMessage(
-        `Invalid format: "${value}" ${input.dataset.card}->${input.dataset.valueLabel}`
-      );
+      logMessage(`Invalid format: "${value}" ${input.id[0]}->${input.id[1]}`);
       halts = false;
     } else {
       input.style.backgroundColor = "lightgreen";
@@ -271,8 +286,6 @@ function checkIfHalts() {
   let currState = "A";
   let steps = 0;
   const maxSteps = 100000; // max steps limit
-  let lastUpdate = 0;
-  const updateInterval = 1000; // Update UI every 1000 steps
 
   while (currIndex >= 0 && currIndex < testArray.length && steps < maxSteps) {
     const currentValue = testArray[currIndex];
@@ -316,18 +329,16 @@ function checkIfHalts() {
 
 function createMachineCursor() {
   const machineCursor = document.createElement("div");
-  machineCursor.className = "machine";
+  machineCursor.id = "machine";
 
   const square =
     document.querySelectorAll(".square")[Math.floor(array.length / 2)];
   grid.appendChild(machineCursor);
   updateMachineCursor(square);
-
-  return machineCursor;
 }
 
 function updateMachineCursor(square) {
-  const machineCursor = document.querySelector(".machine");
+  const machineCursor = document.getElementById("machine");
 
   if (square) {
     const squareRect = square.getBoundingClientRect();
@@ -346,12 +357,12 @@ async function runTuringMachine() {
   oneCount = 0;
   shiftCount = 0;
   let currIndex = Math.floor(array.length / 2);
-  const numSquares = array.length;
   let currState = "A";
-  const machineCursor = createMachineCursor();
+  createMachineCursor();
 
   while (isRunning) {
     await sleep(400);
+    if (!isRunning) break; // to avoid further execution, if machine is reseted, running stops immediately!
 
     // ============================== initialize variables ===============================
     let square = document.querySelectorAll(".square")[currIndex];
@@ -378,12 +389,13 @@ async function runTuringMachine() {
     updateScores();
 
     await sleep(200);
+    if (!isRunning) break; // to avoid further execution, if machine is reseted, running stops immediately!
 
     // ============================== move ===============================
     square = document.querySelectorAll(".square")[currIndex];
     updateMachineCursor(square);
     await sleep(400);
-
+    if (!isRunning) break; // to avoid further execution, if machine is reseted, running stops immediately!
     // ============================== set input color and next state ===============================
     shiftCount++;
     updateScores();
@@ -399,6 +411,10 @@ async function runTuringMachine() {
 }
 
 function resetMachine() {
+  const machine = document.getElementById("machine");
+  if (machine) {
+    machine.remove();
+  }
   isRunning = false;
   oneCount = 0;
   shiftCount = 0;
@@ -408,14 +424,11 @@ function resetMachine() {
   cleanInputsColor();
 }
 
-function setInputColor(state, label) {
+function setInputColor(state, digit) {
   cleanInputsColor();
 
   inputs.forEach((input) => {
-    if (
-      input.dataset.valueLabel === String(label) &&
-      input.dataset.card === state
-    ) {
+    if (input.id[0] === String(state) && input.id[1] === String(digit)) {
       input.style.backgroundColor = "#bf03bc";
     }
   });
@@ -439,9 +452,9 @@ function playSound(sound, delay) {
 }
 
 function openNav() {
-  document.getElementById("mySidenav").style.width = "250px";
+  document.querySelector(".sidenav").classList.add("open");
 }
 
 function closeNav() {
-  document.getElementById("mySidenav").style.width = "0";
+  document.querySelector(".sidenav").classList.remove("open");
 }
